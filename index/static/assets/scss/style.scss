@@ -1,0 +1,217 @@
+/* =======================================================================
+Template Name: Youtubers
+Author:  SmartEye Technologies
+Author URI: www.smarteyeapps.com
+Version: 1.0
+coder name:Prabin Raja
+Description: This Template is created for Youtubers
+======================================================================= */
+
+/* ===================================== Import Variables ================================== */
+@import 'variable';
+/* ===================================== Basic CSS ==================================== */
+@import 'base/basic_setup';
+
+/* ===================================== Basic CSS ==================================== */
+@import 'base/bootstrap';
+
+
+.max-230{
+    max-width: 230px;
+}
+
+
+
+footer{
+   
+    .inner{
+        background-color: #e4ecf1;
+        @include big-padding();
+        color: #444;
+        font-size: .9rem;
+        h4{
+            color: #444;
+           
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+        }
+        .foot-about{
+            p{
+                margin-bottom: 30px;
+            }
+        }
+        .foot-post{
+            .post-row{
+                display: flex;
+                margin-bottom: 10px;
+                .image{
+                     
+                    img{
+                       width: 120px;
+                    }
+                }
+                .detail{
+                    flex-grow: 1;
+                    padding-left: 5px;
+                    
+                    p{
+                        font-size: .8rem;
+                        margin-top: -5px;
+                    }
+                }
+            }
+        }
+        .foot-services{
+            ul{
+                li{
+                    padding: 5px;
+                    font-size: .95rem;
+                    a{
+                        color: #444;
+                    }
+                }
+            }
+        }
+        .foot-news{
+            p{
+               margin-bottom: 20px; 
+            }
+            .input-group{
+                border-radius: 0px;
+                input{
+                    border-radius: 0px;
+                }
+                .input-group-append{
+                    border-radius: 0px;
+                    background-color: #FFF;
+                }
+            }
+            ul{
+                li{
+                    float: left;
+                    padding: 10px;
+                    i{
+                        font-size: 20px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.copy{
+        padding: 20px;
+        background-color: #fff;
+        color: #444;
+    a{
+        color: #444;
+    }
+    span{
+        float: right;
+        i{
+            margin-right: 20px;
+        }
+    }
+}
+
+
+@media screen and (max-width: 767px) {
+    .mul{
+        width: 100%;
+    }
+    .dfr{
+        font-size: 2.5rem;
+    }
+}
+
+
+.slide{
+    padding-top: 56px
+}
+
+header{
+    z-index: 999;
+    position: absolute;
+    width: 100%;
+}
+
+
+.nacul{
+    li{
+        a{
+
+        }
+    }
+}
+
+
+@media (max-width: 767px) {
+    .nacul{
+        width: 100%;
+        li{
+            width: 100%;
+        }    
+    }
+    .border-md-0{
+        border: 0px !important;
+    }
+}
+
+
+
+
+@media (max-width: 1111px) {
+    .carousel-caption{
+        h1{
+            font-size: 2.5rem;
+        }
+       
+    }
+}
+
+@media (max-width: 992px) {
+     h1{
+            font-size: 4.5rem;
+        }
+    .carousel-caption{
+         .text-start{
+            text-align: center !important;
+        }
+    }
+}
+
+.carousel-control-prev-icon{
+   background-color: #FFF;
+    @include shado-1();
+}
+.carousel-control-next-icon{
+   background-color: #FFF;
+    @include shado-1();
+}
+
+
+.carousel-caption{
+    right: 10%;
+    left: 10%;
+    bottom: 15%;
+    @media (max-width: 480px) {
+        bottom: 3%;
+    }
+}
+
+.w-125{
+    width: 90px;
+}
+
+.fs-12{
+  font-size: 5rem;   
+}
+
+.bg-water{
+    background-color: #CCC;
+}
+
+.mah-150{
+    max-height: 240px;
+}

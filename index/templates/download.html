@@ -1,0 +1,261 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Trim Video</title>
+
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/animate.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<style>
+    video {
+        width: 100%;
+        height: 100%;
+    }
+
+    body {
+        background-color: #1a1a1a;
+    }
+
+    .buttonDownload {
+        position: relative;
+        padding: 6px 15px;
+        background-color: black;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        width: 130px;
+        font-family: sans-serif;
+        text-decoration: none;
+        font-size: 1em;
+        text-align: center;
+        text-indent: 15px;
+    }
+
+    .buttonDownload:hover {
+        background-color: aliceblue;
+        color: #1a1a1a;
+        border-style: solid;
+        border-color: #1a1a1a;
+    }
+
+    .buttonDownload:before,
+    .buttonDownload:after {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 15px;
+        top: 60%;
+    }
+
+    /* Download box shape  */
+    .buttonDownload:before {
+        width: 12px;
+        height: 2px;
+        border-style: solid;
+        border-width: 0 2px 2px;
+    }
+
+    /* Download arrow shape */
+    .buttonDownload:after {
+        width: 0;
+        height: 0;
+        margin-left: 2px;
+        margin-top: -7px;
+
+        border-style: solid;
+        border-width: 4px 4px 0 4px;
+        border-color: transparent;
+        border-top-color: inherit;
+
+        animation: downloadArrow 2s linear infinite;
+        animation-play-state: paused;
+    }
+
+    .buttonDownload:hover:before {
+        border-color: black;
+    }
+
+    .buttonDownload:hover:after {
+        border-top-color: black;
+        animation-play-state: running;
+    }
+
+    /* keyframes for the download icon anim */
+    @keyframes downloadArrow {
+
+        /* 0% and 0.001% keyframes used as a hackish way of having the button frozen on a nice looking frame by default */
+        0% {
+            margin-top: -7px;
+            opacity: 1;
+        }
+
+        0.001% {
+            margin-top: -15px;
+            opacity: 0;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            margin-top: 0;
+            opacity: 0;
+        }
+    }
+</style>
+
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <div id="menu-jk" class="nav-part shadow-md bg-white navcol">
+            <div class="container-lg">
+                <div class="row  p-2">
+                    <div class="col-lg-3 p-2">
+                        <a href="{% url 'index' %}">
+                            <img class="max-230" src="{% static 'assets/images/logoh.png' %}" alt="">
+                        </a>
+                        <a data-bs-toggle="collapse" data-bs-target="#menu" class="float-end d-lg-none pt-1 ps-3"><i
+                                class="bi pt-1 fs-1 cp bi-list"></i></a>
+                    </div>
+                    <div id="menu" class="col-lg-9 d-none pt-1 d-lg-block">
+                        <ul class="fw-bold nacul fs-7">
+                            <li class="float-start p-3 px-4"><a href="{% url 'DF_detect'  %}">DeepFake Detection</a>
+                            </li>
+                            <li class="float-start p-3 px-4"><a href="{% url 'colourize' %}">Colorization</a></li>
+                            <li class="float-start p-3 px-4"><a href="">Upscaling</a></li>
+                            <li class="float-start p-3 px-4"><a href="{% url 'extract_frames' %}">Extract Frames</a>
+                            </li>
+                            <li class="float-start p-3 px-4"><a href="{% url 'reverse' %}">Reverse </a></li>
+                            <li class="float-end d-none d-md-block pt-2">
+                                <button class="btn fw-bolder px-4 py-2 btn-dark">Login</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="section-title row">
+        <h2 class="fs-1 fw-bold" style="margin-top: 5%;">{{message}}</h2>
+    </div>
+
+    {% if audioo %}
+    <div class="cover text-center p-2 bg-white mx-auto mb-4">
+        <audio style="border-color: #1a1a1a;border-style:double;border-radius: 7px;"
+            src="{% static 'outputs/' %}{{ path }}" controls></audio>
+    </div>
+    <a href="{% static 'outputs/' %}{{path}}" download class="buttonDownload" id="btndown">Download</a>
+    {% elif original_file %}
+    <div class="container-fluid products bg-gray big-padding pt-1">
+        <div class="row justify-content-center">
+            <div class="col-lg-4 mb-2 col-md-6" style="border-style: ridge;">
+                <div class="cover text-center p-1">
+                    <h2 class="fs-4 fw-bolder">Original</h2>
+                    <video src="{% static 'bw/' %}{{ original_file }} " controls></video>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-2 col-md-6" style="border-style: ridge;">
+                <div class="cover text-center p-1">
+                    <h2 class="fs-4 fw-bolder">Coloured</h2>
+                    <video src="{% static 'outputs/color/result/' %}{{ original_file }}" controls></video>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="{% static 'outputs/color/result/' %}{{ original_file }}" download class="buttonDownload"
+        id="btndown">Download</a>
+    {% elif name %}
+    <div class="col-lg-3 mb-5 col-md-6 mx-auto mt-5">
+        <div class="cover text-center p-1 mx-auto">
+            <a href="{% static 'outputs/' %}{{path}}" download>
+                <img class="w-125" src="{% static 'assets/images/services/zip.png' %}" alt="">
+                <p>{{name}}</p>
+            </a>
+        </div>
+
+    </div>
+    {% elif result %}
+    {% if result == 'DeepFake Detected!!' %}
+    <div class="row">
+        <div class="col-lg-5 mb-4 col-md-6 mx-auto">
+            <div class="cover text-center p-1">
+                <img class="w-125" src="{% static 'assets/images/services/false.png' %}" alt="">
+                <h2 class="fs-4 fw-bolder mt-4" style="color: rgb(197, 33, 33);">{{result}}</h2>
+                <p>Video Title:{{vid_name}} </p>
+                <p>Faces extracted:{{total}} </p>
+                <p style="color: rgb(197, 33, 33);">Anomalous faces:{{anomalies}} </p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-lg-5 mb-4 col-md-6 mx-auto">
+            <div class="cover text-center p-1">
+                <img class="w-125" src="{% static 'assets/images/services/true.png' %}" alt="">
+                <h2 class="fs-4 fw-bolder mt-4" style="color: rgb(27, 194, 27);">{{result}}</h2>
+                <p>Video Title:{{vid_name}} </p>
+                <p>Faces extracted:{{total}} </p>
+                <p style="color: rgb(197, 33, 33);">Anomalous faces:{{anomalies}} </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="col-lg-4 mb-5 col-md-6 mx-auto" style="border-color: #1a1a1a;border-style:double;border-radius: 7px;">
+        <div class="cover text-center p-2 bg-white">
+            <video src="{% static 'outputs/' %}{{ path }}" controls></video>
+        </div>
+    </div>
+    <a href="{% static 'outputs/' %}{{path}}" download class="buttonDownload" id="btndown">Download</a>
+    {% endif %}
+
+    <footer class="text-center text-white mt-auto" style="background-color:black;">
+        <!-- Grid container -->
+        <div class="container pt-1 pb-1">
+            <!-- Section: Social media -->
+            <section class="mb-2">
+                <!-- Facebook -->
+                <a class="btn text-white btn-floating m-2 rounded-circle" style="background-color: #3b5998;" href="#!"
+                    role="button"><i class="bi bi-facebook"></i></a>
+
+                <!-- Twitter -->
+                <a class="btn text-white btn-floating m-2 rounded-circle" style="background-color: #55acee;" href="#!"
+                    role="button"><i class="bi bi-twitter"></i></a>
+                <!-- Instagram -->
+                <a class="btn text-white btn-floating m-2 rounded-circle" style="background-color: #ac2bac;" href="#!"
+                    role="button"><i class="bi bi-instagram"></i></a>
+
+                <!-- Linkedin -->
+                <a class="btn text-white btn-floating m-2 rounded-circle" style="background-color: #0082ca;" href="#!"
+                    role="button"><i class="bi bi-linkedin"></i></a>
+                <!-- Github -->
+                <a class="btn text-white btn-floating m-2 rounded-circle" style="background-color: #333333;" href="#!"
+                    role="button"><i class="bi bi-github"></i></a>
+            </section>
+            <!-- Section: Social media -->
+        </div>
+        <!-- Grid container -->
+        <div class="text-center p-2" style="background-color: rgba(97, 90, 90, 0.2);">
+            <a href="https://www.smarteyeapps.com/" class="text-white">2022 &copy; All Rights Reserved | Designed
+                and
+                Developed by Smarteyeapps.com</a>
+        </div>
+    </footer>
+
+
+</body>
+<script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/plugins/scroll-fixed/jquery-scrolltofixed-min.js' %}"></script>
+<script src="{% static 'assets/js/script.js' %}"></script>
+
+</html>
