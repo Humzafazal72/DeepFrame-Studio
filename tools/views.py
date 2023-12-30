@@ -13,7 +13,7 @@ from django.shortcuts import render, redirect
 from .Colorization.deoldify import visualize
 from moviepy.editor import VideoFileClip, concatenate_videoclips
 
-x_tuned = tensorflow.keras.models.load_model(r"models\xception_fine_tuned_df.h5")
+x_tuned = tensorflow.keras.models.load_model(r"models\fine_tuned_meso.h5")
 
 colorizer = visualize.get_video_colorizer()
 
@@ -96,7 +96,7 @@ def process_video(input_video_path, output_face_folder, video_name):
                     face_image = img_aligned[y : y + height, x : x + width]
 
                     aligned_face_filename = os.path.join(
-                        output_face_folder, f"{video_name}align_face_{iter}.jpg"
+                        output_face_folder, f"{iter}.jpg"
                     )
                     cv2.imwrite(aligned_face_filename, face_image)
 
@@ -518,8 +518,11 @@ def colourize(request):
 
 def DF_detect(request):
     if request.method == "POST":
-        real = [1]
-        fake = [1,2,3]
+        if os.path.exists(os.path.join(settings.BASE_DIR,'index','static','outputs','DF_faces')):
+            shutil.rmtree(os.path.join(settings.BASE_DIR,'index','static','outputs','DF_faces'))
+        status=[]
+        images=[]
+
         input_vid = request.FILES.get("input_vid")
         vid_name = input_vid.name
 
@@ -530,28 +533,29 @@ def DF_detect(request):
         with open(original_vid_path, "wb") as file:
             file.write(vid_content)
 
-        output_face_path = r"outputs\DF_faces"
-        #process_video(original_vid_path, output_face_path, vid_name)
-        #for i in os.listdir(output_face_path):
-        #    img_path = os.path.join(output_face_path, i)
-        #    img = process_img(img_path)
-        #    pred = x_tuned.predict(img)
-        #    if pred[0] > 0.5:
-        #        fake.append(i)
-        #    elif pred[0] < 0.5:
-        #        real.append(i)
+        os.mkdir(os.path.join(settings.BASE_DIR,'index','static','outputs','DF_faces'))
+        output_face_path=os.path.join(settings.BASE_DIR,'index','static','outputs','DF_faces')
+        process_video(original_vid_path, output_face_path, vid_name)
+        for i in os.listdir(output_face_path):
+            images.append(i)
+            img_path = os.path.join(output_face_path, i)
+            img = process_img(img_path)
+            pred = x_tuned.predict(img)
+            if pred[0] > 0.5:
+                status.append(1)   
+            elif pred[0] < 0.5:
+                status.append(0)
             
         result='No DeepFake Detected!'
-        img='false.png'
-        if len(fake)>len(real):
+        if sum(status) >= len(status)/2:
             result='DeepFake Detected!!' 
-            img='true.png'
         
         return render(
         request,
         "download.html",
         {"message": "Check Complete!",'result':result,'vid_name':vid_name,
-         'anomalies':len(fake),'total':len(fake)+len(real)},
+         'anomalies':sum(status),'total':len(status),
+          'status':status, 'images':images },
         )
 
     return render(request, "DF_detect.html")
