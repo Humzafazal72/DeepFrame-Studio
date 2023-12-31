@@ -34,20 +34,18 @@ Welcome to your Django web app for video processing! This application provides a
    git clone https://github.com/Humzafazal72/DeepFrame-Studio.git
    cd DeepFrame Studio
    
-2. Create a anaconda virtual environment with python version 3.11.5:
-   
+2. Import my Anaconda Virtual Environment 'environment.yml' (You can follow <a href="https://docs.anaconda.com/free/navigator/tutorials/manage-environments/">this tutorial</a>).
+
+3. Install fastai:
+
    ```bash
-   conda create --name myenv python=3.11.5
-
-3. Install all the dependencies from requirements.txt:
-    ```bash
-   pip install -r requirements.txt
-
+   pip install fastai
+   
 4. Downloads the weights for DeOldify from <a href="https://data.deepai.org/deoldify/ColorizeVideo_gen.pth">this link</a>:
 
 5. Place the .pth weights in the folder 'models' along with mesonet's weights.
 
-7. Run the project using the command:
+6. Run the project using the command:
 
     ```bash
    python manage.py runserver
