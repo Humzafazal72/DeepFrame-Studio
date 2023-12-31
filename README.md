@@ -1,4 +1,4 @@
-# Your Django Video Processing Web App
+# DeepFrame Studio
 
 Welcome to your Django web app for video processing! This application provides a variety of features for manipulating and enhancing your video content. The main emphasis is on two powerful AI features: DF (Dense Fog) detection using a fine-tuned MesoNet and video colorization via DeOldify.
 
