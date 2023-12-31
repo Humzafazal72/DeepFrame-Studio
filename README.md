@@ -4,7 +4,7 @@ Welcome to our Django web app for video processing! This application provides a 
 
 ## Table of Contents
 - [Features](#features)
-- [Installation and Setup](#Installation and Setup)
+- [Installation and Setup](#InstallationandSetup)
 - [Usage](#Usage)
 - [Dependencies](#Dependencies)
 - [Contributing](#Contributing)
