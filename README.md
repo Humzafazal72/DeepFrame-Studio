@@ -31,5 +31,27 @@ Welcome to your Django web app for video processing! This application provides a
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/Humzafazal72/DeepFrame-Studio.git
+   cd DeepFrame Studio
+   
+2. Create a anaconda virtual environment with python version 3.11.5:
+   
+   ```bash
+   conda create --name myenv python=3.11.5
+
+3. Install all the dependencies from requirements.txt:
+    ```bash
+   pip install -r requirements.txt
+
+4. Downloads the weights for DeOldify from <a href="https://data.deepai.org/deoldify/ColorizeVideo_gen.pth">this link</a>:
+
+5. Place the .pth weights in the folder 'models' along with mesonet's weights.
+
+7. Run the project using the command:
+
+    ```bash
+   python manage.py runserver
+
+
+ 
+   
