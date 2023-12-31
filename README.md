@@ -52,15 +52,15 @@ Welcome to your Django web app for video processing! This application provides a
     ```bash
    python manage.py runserver
     
-##Usage
+## Usage
 
 Before any commercial use take permission from the owners of Deoldify and the creaters of CelebDFv2 dataset. 
 
-##Dependencies
+## Dependencies
 
 Dependencies are listed in the requirements.txt file.
 
-##Contributing
+## Contributing
 
 - <a href="https://github.com/MaheenShahzad"> Maheen shahzad </a>
 
