@@ -8,23 +8,23 @@ Welcome to your Django web app for video processing! This application provides a
 - [Usage](#usage)
 - [Dependencies](#dependencies)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
 ### Video Processing
 1. **Video to Audio:** Convert videos to audio effortlessly.
-2. **Extract Frames from Video:** Capture still frames from your videos.
-3. **Add Video to Audio:** Merge video content with different audio tracks.
-4. **Reverse Video:** Play your videos backward for a unique perspective.
-5. **Change Video Speed:** Adjust video playback speed to suit your preferences.
-6. **Video Trimming:** Trim your videos to the desired length.
-7. **Add Subtitles to Videos:** Enhance your videos by adding subtitles.
-8. **Merge Multiple Videos:** Combine multiple videos into a single file.
+2. **Video to Audio:** Change videos format effortlessly.
+3. **Extract Frames from Video:** Capture still frames from your videos.
+4. **Add Video to Audio:** Merge video content with different audio tracks.
+5. **Reverse Video:** Play your videos backward for a unique perspective.
+6. **Change Video Speed:** Adjust video playback speed to suit your preferences.
+7. **Video Trimming:** Trim your videos to the desired length.
+8. **Add Subtitles to Videos:** Enhance your videos by adding subtitles.
+9. **Merge Multiple Videos:** Combine multiple videos into a single file.
 
 ### AI Features
-9. **DF Detection using MesoNet:** Detect dense fog in videos using a fine-tuned MesoNet model.
-10. **Video Colorization via DeOldify:** Apply advanced video colorization using the DeOldify model.
+10. **DF Detection using MesoNet:** Detect dense fog in videos using a fine-tuned MesoNet model.
+11. **Video Colorization via DeOldify:** Apply advanced video colorization using the DeOldify model.
 
 ## Installation
 
@@ -51,7 +51,13 @@ Welcome to your Django web app for video processing! This application provides a
 
     ```bash
    python manage.py runserver
+    
+##Usage:
+Before any commercial use take permission from the owners of Deoldify and the creaters of CelebDFv2 dataset. 
 
+##Dependencies:
+Dependencies are listed in the requirements.txt file.
 
- 
-   
+##Contributing:
+- <a href="https://github.com/MaheenShahzad"> Maheen shahzad </a>
+
