@@ -58,7 +58,9 @@ Before any commercial use take permission from the owners of Deoldify and the cr
 
 ## Dependencies
 
-Dependencies are listed in the requirements.txt file.
+- Python 3.11.5
+- Anaconda
+- ffmpeg
 
 ## Contributing
 
