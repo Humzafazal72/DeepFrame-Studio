@@ -4,7 +4,7 @@ Welcome to your Django web app for video processing! This application provides a
 
 ## Table of Contents
 - [Features](#features)
-- [Installation](#installation)
+- [Installation and Setup](#installation)
 - [Usage](#usage)
 - [Dependencies](#dependencies)
 - [Contributing](#contributing)
@@ -26,26 +26,28 @@ Welcome to your Django web app for video processing! This application provides a
 10. **DF Detection using MesoNet:** Detect dense fog in videos using a fine-tuned MesoNet model.
 11. **Video Colorization via DeOldify:** Apply advanced video colorization using the DeOldify model.
 
-## Installation
+## Installation and Setup
 
 1. Clone the repository:
 
    ```bash
    git clone https://github.com/Humzafazal72/DeepFrame-Studio.git
    cd DeepFrame Studio
-   
-2. Import my Anaconda Virtual Environment 'environment.yml' (You can follow <a href="https://docs.anaconda.com/free/navigator/tutorials/manage-environments/">this tutorial</a>).
 
-3. Install fastai:
+2. Download and install ffmpeg (You can follow <a href="https://phoenixnap.com/kb/ffmpeg-windows">this tutorial</a>).
+    
+3. Import my Anaconda Virtual Environment 'environment.yml' (You can follow <a href="https://docs.anaconda.com/free/navigator/tutorials/manage-environments/">this tutorial</a>).
+
+4. Install fastai:
 
    ```bash
    pip install fastai
-   
-4. Downloads the weights for DeOldify from <a href="https://data.deepai.org/deoldify/ColorizeVideo_gen.pth">this link</a>:
+      
+5. Downloads the weights for DeOldify from <a href="https://data.deepai.org/deoldify/ColorizeVideo_gen.pth">this link</a>:
 
-5. Place the .pth weights in the folder 'models' along with mesonet's weights.
+6. Place the .pth weights in the folder 'models' along with mesonet's weights.
 
-6. Run the project using the command:
+7. Run the project using the command:
 
     ```bash
    python manage.py runserver
