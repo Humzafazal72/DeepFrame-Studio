@@ -12,28 +12,28 @@ def register(request):
         myuser.save()
 
         messages.success(request, "Your account has been successfully created")
-        return redirect('login')
+        return redirect('index')
     
     return render(request,"register.html")
 
-def login(request):
-     if request.method == "POST":
-        username=request.POST['username']
-        password=request.POST['password']
-        user = authenticate(username=username, password=password)
+def loginn(request):
+    if request.method == 'POST':
+        email = request.POST.get('username')
+        password = request.POST.get('password')
 
+        user = authenticate(request, username=email, password=password)
+        print(user)
         if user is not None:
-            login(request,user)
-            return render(request, "index.html",{'username': username})
+            login(request, user)
+            return redirect('index')
         else:
             messages.error(request,"Bad Credentials")
             return redirect('index')
             
-     return redirect('index')
+    return redirect('index')
 
 def signout(request):
     logout(request)
-    messages.success(request,"Logged Out Successfully!")
     return redirect('index')
 
 

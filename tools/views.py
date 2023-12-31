@@ -9,6 +9,7 @@ import numpy as np
 from PIL import Image
 from mtcnn.mtcnn import MTCNN
 from django.conf import settings
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from .Colorization.deoldify import visualize
 from moviepy.editor import VideoFileClip, concatenate_videoclips
@@ -148,7 +149,8 @@ def add_subtitles(request):
             "dfxp",
             "ttml",
         ]:
-            return redirect("add_subtitles")
+           messages.warning(request,"Please ensure the subtitle file is in valid format.")
+           return redirect('add_subtitles')
 
         vid_name = input_vid.name
         video_content = input_vid.read()
@@ -173,11 +175,15 @@ def add_subtitles(request):
             settings.BASE_DIR, "index", "static", "outputs", "add_subs", new_name
         )
 
-        ffmpeg_vid = ffmpeg.input(original_video_path)
-        ffmpeg_audio = ffmpeg_vid.audio
-        ffmpeg.concat(
-            ffmpeg_vid.filter("subtitles", sub_path), ffmpeg_audio, v=1, a=1
-        ).output(output_path).run()
+        try:
+            ffmpeg_vid = ffmpeg.input(original_video_path)
+            ffmpeg_audio = ffmpeg_vid.audio
+            ffmpeg.concat(
+                ffmpeg_vid.filter("subtitles", sub_path), ffmpeg_audio, v=1, a=1
+            ).output(output_path).run()
+        except ffmpeg.Error as e:
+           messages.warning(request,"There was an error processing the video. please ensure there isn't a '.' in the video name.")
+           return redirect('add_subtitles')
 
         remaining_path = f"add_subs\\{new_name}"
         return render(
@@ -206,7 +212,12 @@ def to_audio(request):
         output_path = os.path.join(
             settings.BASE_DIR, "index", "static", "outputs", "audio", new_name
         )
-        (ffmpeg.input(orignal_vid_path).output(output_path).run())
+        try:
+            ffmpeg.input(orignal_vid_path).output(output_path).run()
+        except ffmpeg.Error as e:
+            messages.warning(request,"There was an error processing the video. Please try again later or try changing the video format.")
+            return redirect('to_audio')
+
         remaining_path = f"audio\\{new_name}"
         return render(
             request,
@@ -241,9 +252,10 @@ def change_format(request):
         )
         try:
             ffmpeg.input(orignal_vid_path).output(output_path).run()
-            print(f"Conversion successful")
         except ffmpeg.Error as e:
-            print(f"Error converting: {e.stderr}")
+            messages.warning(request,"There was an error processing the video. Please ensure there isn't '.' in the video name.")
+            return redirect('change_format')        
+        
         remaining_path = f"convert\\{new_name}"
         return render(
             request,
@@ -281,10 +293,14 @@ def extract_frames(request):
         output_path = os.path.join(
             settings.BASE_DIR, "index", "static", "outputs", "extract_frames", new_name
         )
+        try:
+            ffmpeg.input(original_vid_path).output(
+                os.path.join(output_path, "frame%d.png")
+            ).run()
 
-        ffmpeg.input(original_vid_path).output(
-            os.path.join(output_path, "frame%d.png")
-        ).run()
+        except ffmpeg.Error as e:
+            messages.warning(request,"There was an error processing the video. Please ensure the video name does not contain '.' in it.")
+            return redirect('extract-frames')
 
         zip_path = f"index\\static\\outputs\\extract_frames\\{new_name}"
 
@@ -323,11 +339,12 @@ def reverse(request):
         output_path = os.path.join(
             settings.BASE_DIR, "index", "static", "outputs", "reverse", new_name
         )
-        (
-            ffmpeg.input(orignal_vid_path)
-            .output(output_path, vf="reverse", af="areverse")
-            .run()
-        )
+        try:
+            ffmpeg.input(orignal_vid_path).output(output_path, vf="reverse", af="areverse").run()
+        except ffmpeg.Error as e:
+            messages.warning(request,"There was an error processing the video. Please the ensure the video doesn't have '.' in the name.")
+            return redirect('reverse')
+        
         remaining_path = f"reverse\\{new_name}"
         return render(
             request,
@@ -365,12 +382,17 @@ def add_audio(request):
         output_path = os.path.join(
             settings.BASE_DIR, "index", "static", "outputs", "add_audio", new_name
         )
-        ffmpeg.concat(
-            ffmpeg.input(orignal_vid_path).video,
-            ffmpeg.input(orignal_audio_path),
-            v=1,
-            a=1,
-        ).output(output_path).run()
+        try:
+            ffmpeg.concat(
+                ffmpeg.input(orignal_vid_path).video,
+                ffmpeg.input(orignal_audio_path),
+                v=1,
+                a=1,
+            ).output(output_path).run()
+        except ffmpeg.Error as e:
+            messages.warning(request,"There was an error processing the video. Please ensure there isn't '.' in the video name.")
+            return redirect('add_audio')
+        
         remaining_path = f"add_audio\\{new_name}"
         return render(
             request,
@@ -400,8 +422,11 @@ def merge(request):
         output_path = os.path.join(
             settings.BASE_DIR, "index", "static", "outputs", "merge", new_name
         )   
-
-        concatenate(files, output_path, method="compose")  
+        try:
+            concatenate(files, output_path, method="compose")          
+        except:
+            messages.warning(request,"There was an error processing the video. Please ensure there wasn't '.' in the video name and videos are in mp4 format.")            
+            return redirect('merge')
         remaining_path = f"merge\\{new_name}"
         return render(
             request,
@@ -439,11 +464,16 @@ def trim_vid(request):
         output_path = os.path.join(
             settings.BASE_DIR, "index", "static", "outputs", "trim", new_name
         )
-        (
-            ffmpeg.input(orignal_vid_path, ss=start, to=endd)
-            .output(output_path)
-            .run()
-        )
+        try:
+            (
+                ffmpeg.input(orignal_vid_path, ss=start, to=endd)
+                .output(output_path)
+                .run()
+            )
+        except ffmpeg.Error as e:
+            messages.warning(request,"There was an error processing the video. Please ensure the time stamp given was valid and there wasn't '.' in the video name.")
+            return redirect('trim')
+
         remaining_path = f"trim\\{new_name}"
         return render(
             request,
@@ -473,15 +503,20 @@ def change_speed(request):
         output_path = os.path.join(
             settings.BASE_DIR, "index", "static", "outputs", "speed", new_name
         )
-        (
-            ffmpeg.input(orignal_vid_path)
-            .output(
-                output_path,
-                vf="setpts=" + str(1 / speed_factor) + "*PTS",
-                af="atempo=" + str(speed_factor),
+        try:
+            (
+                ffmpeg.input(orignal_vid_path)
+                .output(
+                    output_path,
+                    vf="setpts=" + str(1 / speed_factor) + "*PTS",
+                    af="atempo=" + str(speed_factor),
+                )
+                .run()
             )
-            .run()
-        )
+        except ffmpeg.Error as e:
+            messages.warning(request,"There was an error processing the video. Please ensure there isn't '.' in the video name.")
+            return redirect('change_speed')
+        
         remaining_path = f"Speed\\{new_name}"
         return render(
             request,
@@ -493,71 +528,81 @@ def change_speed(request):
 
 
 def colourize(request):
-    if request.method == "POST":
-        input_vid = request.FILES.get("input_vid")
-        vid_name = input_vid.name
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            input_vid = request.FILES.get("input_vid")
+            vid_name = input_vid.name
 
-        vid_content = input_vid.read()
-        orignal_vid_path = os.path.join(
-            settings.BASE_DIR,'index','static' , "bw", vid_name
-        )
-        with open(orignal_vid_path, "wb") as file:
-            file.write(vid_content)
+            vid_content = input_vid.read()
+            orignal_vid_path = os.path.join(
+                settings.BASE_DIR,'index','static' , "bw", vid_name
+            )
+            with open(orignal_vid_path, "wb") as file:
+                file.write(vid_content)
 
-        colorizer._colorize_from_path(orignal_vid_path, render_factor=21)
-        shutil.rmtree(r'.\index\static\outputs\color\bwframes')
-        shutil.rmtree(r'.\index\static\outputs\color\colorframes')
-        return render(
-            request,
-            "download.html",
-            {"message": "Video Coloured Successfully!",'original_file':vid_name},
-        )
+            colorizer._colorize_from_path(orignal_vid_path, render_factor=21)
+            shutil.rmtree(r'.\index\static\outputs\color\bwframes')
+            shutil.rmtree(r'.\index\static\outputs\color\colorframes')
+            return render(
+                request,
+                "download.html",
+                {"message": "Video Coloured Successfully!",'original_file':vid_name},
+            )
+
+        return render(request, "colourize.html")
     
-    return render(request, "colourize.html")
+    else:
+        messages.warning(request,'You must be logged in to use AI features.')
+        return redirect('index')    
+
 
 
 def DF_detect(request):
-    if request.method == "POST":
-        if os.path.exists(os.path.join(settings.BASE_DIR,'index','static','outputs','DF_faces')):
-            shutil.rmtree(os.path.join(settings.BASE_DIR,'index','static','outputs','DF_faces'))
-        status=[]
-        images=[]
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            if os.path.exists(os.path.join(settings.BASE_DIR,'index','static','outputs','DF_faces')):
+                shutil.rmtree(os.path.join(settings.BASE_DIR,'index','static','outputs','DF_faces'))
+            status=[]
+            images=[]
 
-        input_vid = request.FILES.get("input_vid")
-        vid_name = input_vid.name
+            input_vid = request.FILES.get("input_vid")
+            vid_name = input_vid.name
 
-        vid_content = input_vid.read()
-        original_vid_path = os.path.join(
-            settings.BASE_DIR, "inputs", "vids", "DF", vid_name
-        )
-        with open(original_vid_path, "wb") as file:
-            file.write(vid_content)
+            vid_content = input_vid.read()
+            original_vid_path = os.path.join(
+                settings.BASE_DIR, "inputs", "vids", "DF", vid_name
+            )
+            with open(original_vid_path, "wb") as file:
+                file.write(vid_content)
 
-        os.mkdir(os.path.join(settings.BASE_DIR,'index','static','outputs','DF_faces'))
-        output_face_path=os.path.join(settings.BASE_DIR,'index','static','outputs','DF_faces')
-        process_video(original_vid_path, output_face_path, vid_name)
-        for i in os.listdir(output_face_path):
-            images.append(i)
-            img_path = os.path.join(output_face_path, i)
-            img = process_img(img_path)
-            pred = x_tuned.predict(img)
-            if pred[0] > 0.5:
-                status.append(1)   
-            elif pred[0] < 0.5:
-                status.append(0)
-            
-        result='No DeepFake Detected!'
-        if sum(status) >= len(status)/2:
-            result='DeepFake Detected!!' 
-        
-        return render(
-        request,
-        "download.html",
-        {"message": "Check Complete!",'result':result,'vid_name':vid_name,
-         'anomalies':sum(status),'total':len(status),
-          'status':status, 'images':images },
-        )
+            os.mkdir(os.path.join(settings.BASE_DIR,'index','static','outputs','DF_faces'))
+            output_face_path=os.path.join(settings.BASE_DIR,'index','static','outputs','DF_faces')
+            process_video(original_vid_path, output_face_path, vid_name)
+            for i in os.listdir(output_face_path):
+                images.append(i)
+                img_path = os.path.join(output_face_path, i)
+                img = process_img(img_path)
+                pred = x_tuned.predict(img)
+                if pred[0] > 0.5:
+                    status.append(1)   
+                elif pred[0] < 0.5:
+                    status.append(0)
 
-    return render(request, "DF_detect.html")
+            result='No DeepFake Detected!'
+            if sum(status) >= len(status)/2:
+                result='DeepFake Detected!!' 
 
+            return render(
+            request,
+            "download.html",
+            {"message": "Check Complete!",'result':result,'vid_name':vid_name,
+             'anomalies':sum(status),'total':len(status),
+              'status':status, 'images':images },
+            )
+
+        return render(request, "DF_detect.html")
+
+    else:
+        messages.warning(request,'You must be logged in to use AI features.')
+        return redirect('index')
 

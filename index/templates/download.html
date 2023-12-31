@@ -1,5 +1,6 @@
 {% load static %}
 {% load zip_filter %}
+
 <!doctype html>
 <html lang="en">
 
@@ -145,13 +146,22 @@
                             <li class="float-start p-3 px-4"><a href="{% url 'DF_detect'  %}">DeepFake Detection</a>
                             </li>
                             <li class="float-start p-3 px-4"><a href="{% url 'colourize' %}">Colorization</a></li>
-                            <li class="float-start p-3 px-4"><a href="">Upscaling</a></li>
                             <li class="float-start p-3 px-4"><a href="{% url 'extract_frames' %}">Extract Frames</a>
                             </li>
                             <li class="float-start p-3 px-4"><a href="{% url 'reverse' %}">Reverse </a></li>
+                                                        {% if user.is_authenticated %}
                             <li class="float-end d-none d-md-block pt-2">
-                                <button class="btn fw-bolder px-4 py-2 btn-dark">Login</button>
+                                <a href="{% url 'logout' %}"
+                                    style="text-decoration: none;color: white;"><button
+                                        class="btn fw-bolder px-4 py-2 btn-dark"> Logout</button></a>
                             </li>
+                            {% else %}
+                            <li class="float-end d-none d-md-block pt-2">
+                                <a href="#myModal" data-toggle="modal"
+                                    style="text-decoration: none;color: white;"><button
+                                        class="btn fw-bolder px-4 py-2 btn-dark"> Login</button></a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
