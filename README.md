@@ -13,7 +13,7 @@ Welcome to our Django web app for video processing! This application provides a 
 
 ### Video Processing
 1. **Video to Audio:** Convert videos to audio effortlessly.
-2. **Video to Audio:** Change videos format effortlessly.
+2. **Change video format:** Change videos format effortlessly.
 3. **Extract Frames from Video:** Capture still frames from your videos.
 4. **Add Video to Audio:** Merge video content with different audio tracks.
 5. **Reverse Video:** Play your videos backward for a unique perspective.
