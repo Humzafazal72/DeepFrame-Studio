@@ -64,5 +64,5 @@ Before any commercial use take permission from the owners of Deoldify and the cr
 
 ## Contributing
 
-- <a href="https://github.com/MaheenShahzad"> Maheen shahzad </a>
+- <a href="https://github.com/MaheenShahzad"> Maheen Shahzad </a>
 
